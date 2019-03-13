@@ -1,6 +1,6 @@
 # Nginx 
 
-##SSL
+## SSL
 
 ```conf
         listen       443; //监听端口
