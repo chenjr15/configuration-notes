@@ -4,7 +4,7 @@
 
 ```conf
         listen       443; //监听端口
-server_name  www.localhost.cn;
+        server_name  www.localhost.cn;
   
         ssl                  on;        　　　　　　　　　　//开启ssl
         ssl_certificate      /etc/pki/tls/certs/server.crt;      //证书位置
