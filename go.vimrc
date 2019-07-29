@@ -24,7 +24,7 @@ set shiftwidth=4
 set expandtab
 
 " 设置转换成空格的数量
-set softtabstop=2
+set softtabstop=4
 
 " 高亮当前行
 set cursorline
@@ -40,8 +40,9 @@ set laststatus=1
 " 使用gopls做补全
 let g:go_def_mode = 'gopls'
 
-" 替换默认的gofmt为goimports 这样会自动导入
+" 替换默认的gofmt为goimports 这样会自动导入需要的包
 let g:go_fmt_command = "goimports"
+
 let g:go_autodetect_gopath = 1
 let g:go_list_type = "quickfix"
 
@@ -73,13 +74,13 @@ let NERDTreeShowHidden=0
 " 设置宽度
 let NERDTreeWinSize=25
 
-" 忽略一下文件的显示
+" 忽略以下文件的显示
 let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 
 " 打开 vim 文件及显示书签列表
 let NERDTreeShowBookmarks=2
 
-" 在终端启动vim时，共享NERDTree
+" 在终端启动vim时打开nerdtree
 let g:nerdtree_tabs_open_on_console_startup=0
 
 
