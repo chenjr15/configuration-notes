@@ -37,6 +37,7 @@ make install
 
 ```bash
 echo 'export PATH="/usr/local/vim8/bin:$PATH"'>>~/.bashrc
+export PATH="/usr/local/vim8/bin:$PATH"
 ```
 
 打开vim试试吧
