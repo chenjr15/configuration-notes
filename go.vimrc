@@ -1,11 +1,18 @@
 " Go vim 配置
 " linux 需要安装以下依赖:ctags 
 
+" ---vim basic configuration---
+"
+" 设置leader键 
+let mapleader=";"
+" 语法高亮
+syntax on
+
 " 显示行号
 set number
 
-" 语法高亮
-syntax on
+" 设置相对行号
+set relativenumber 
 
 " 显示当前输入的命令
 set showcmd
@@ -16,7 +23,8 @@ set showmode
 set encoding=utf-8
 
 " 设置tab显示的宽度
-set tabstop=2
+set tabstop=4
+
 " 缩进宽度
 set shiftwidth=4
 
@@ -29,14 +37,20 @@ set softtabstop=4
 " 高亮当前行
 set cursorline
 
-"设置高亮搜索结果
+" 设置高亮搜索结果, 搜索完之后可以用set nohl 清除高亮
 set hlsearch
 
 "  显示状态栏 1 为多窗口显示 2为一直显示 0 为不显示
 set laststatus=1
 
+" 开启鼠标支持
+set mouse=a
 
-" vim-go 的配置
+
+
+" --- vim-go configuration ---
+"  
+"
 " 使用gopls做补全
 let g:go_def_mode = 'gopls'
 
@@ -45,8 +59,8 @@ let g:go_fmt_command = "goimports"
 
 let g:go_autodetect_gopath = 1
 let g:go_list_type = "quickfix"
-
 let g:go_version_warning = 1
+"
 " 高亮设置
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
@@ -56,10 +70,26 @@ let g:go_highlight_operators = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_generate_tags = 1
+" 自动显示光标处的类型信息
+let g:go_auto_type_info = 1
+"
+" --- vim-go keymap  ---
+"
+"
+map <Leader>t :GoTest<CR>
+map gt :GoAlternate!<CR>
+map gb :GoDefPop<CR>
+map gl :GoLint<CR>
+map gr :GoRun<CR>
+map gk :GoKeyify<CR>
+map gi :GoImport 
+map gv :GoVet<CR>
 
 " NERDTree 插件设置
-" 设置快捷建 F7
-" 打开和关闭NERDTree快捷键
+" 
+"
+
+" F7打开和关闭NERDTree
 map <F7> :NERDTreeToggle<CR>
 nmap <M-m> :NERDTreeFind<CR>
 
@@ -84,11 +114,19 @@ let NERDTreeShowBookmarks=2
 let g:nerdtree_tabs_open_on_console_startup=0
 
 
-" majutsushi/tagbar 插件打开关闭快捷键
+
+" --- tagbar ---
+"
+"
+"
+" F8 打开 tagbar 
 nmap <F8> :TagbarToggle<CR>
 
 
-
+" --- vim-plug --- 
+"
+"
+"
 call plug#begin()
 " vim-go 
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
@@ -106,14 +144,45 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 " 大纲式导航, 需要安装ctags , 上面设定了快捷键为F8
 Plug 'majutsushi/tagbar'
 
+if has('nvim')
+  " 自动补全
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " clang 插件
+  Plug 'Shougo/deoplete-clangx'
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  " 需要python支持
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
 call plug#end()
 
+
 " CleverTab 按下tab调用C-X C-O 自动补全, 行首且只有空白字符则依旧是tab
+"
+"
 function! CleverTab()
     if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
         return "\<Tab>"
     else
-        return "\<C-X>\<C-O>"
+        return "\<C-N>"
     endif
 endfunction
 inoremap <Tab> <C-R>=CleverTab()<CR>
+
+
+
+" --- deoplete --- 
+"
+"
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
+
+
+"
+" --- neovim python3 --- 
+"
+"
+"
+let g:python3_host_prog='/home/chenjr/usr/bin/python3'
