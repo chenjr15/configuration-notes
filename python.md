@@ -38,6 +38,20 @@ apt install \
 
 ```
 
+for centos 7
+```bash
+yum install -y \
+      # for _ctypes
+      libffi-devel\
+      # for lzma
+      xz-devel\
+      sqlite-devel\
+      # for _bz2\
+      bzip2-devel\
+      libuuid-devel\
+      readline-devel\
+```
+
 三步走
 
 ```bash
@@ -49,7 +63,8 @@ make -j install
 环境变量设置
 
 ```bash
+# 设置path
 export PATH="$HOME/usr/python3.7/bin:$PATH"
-
-
+# 设置manpath, 这样就可以用man python3.7 查看帮助了
+export MANPATH="$HOME/usr/python3.7/share/man:$MANPATH"
 ```
