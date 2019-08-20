@@ -25,3 +25,11 @@ GRANT USAGE ON database.table TO 'user_name'@'hostname';
 ```mysql
 SET PASSWORD FOR 'user_name'@'hostname'=PASSWORD('new_password');
 ```
+
+
+## 查看所用字符集
+
+```mysql
+show variables like 'character_set_%';
+```
+
