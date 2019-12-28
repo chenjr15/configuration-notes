@@ -137,12 +137,15 @@ Plug 'jiangmiao/auto-pairs'
 " 在左边提供一个文件目录树, 上面设定了快捷键为F7
 Plug 'scrooloose/nerdtree'
 
-
 " 可以在文件目录树中可以显示git的信息 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " 大纲式导航, 需要安装ctags , 上面设定了快捷键为F8
 Plug 'majutsushi/tagbar'
+
+" 对齐插件
+Plug 'godlygeek/tabular'
+
 
 if has('nvim')
   " 自动补全
