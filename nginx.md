@@ -1,5 +1,27 @@
 # Nginx 
 
+## 反向代理
+
+`location` 块中添加
+
+```conf
+ proxy_set_header Host $host;
+ proxy_set_header  X-Real-IP        $remote_addr;
+ # XFF头可能被欺骗, 后端应该用X-Real-IP来确定客户端的真实地址
+ proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+ proxy_set_header X-NginX-Proxy true;
+
+ proxy_pass http://localhost:3000
+
+```
+
+# 不显示nginx版本号
+
+在`http`块中添加:
+```conf
+server_tokens off;
+```
+
 ## SSL
 
 ```conf
