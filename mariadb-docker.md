@@ -7,6 +7,7 @@ services:
       container_name: phpmyadmin
       environment:
        - PMA_HOST=mariadb
+       - PMA_ABSOLUTE_URI=https://www.example.net/path_to_your_phpMyAdmin_directory/
       restart: always
       ports:
        - 8080:80
