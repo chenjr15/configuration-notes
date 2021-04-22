@@ -15,7 +15,7 @@
 
 ```
 
-# 不显示nginx版本号
+## 不显示nginx版本号
 
 在`http`块中添加:
 ```conf
@@ -45,3 +45,53 @@ server_tokens off;
     ssl_stapling_verify on; # Requires nginx => 1.3.7
     add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
 ```
+
+## nginx websocket 代理
+`websocket`代理需要注意的是，`websocket`和`http`走的是同一个端口。关键的地方是在握手的时候会有`Connection` 和 `Upgrade` 两个重要的`http`头，客户端通过设置这两个头告知服务器需要升级协议，因此需要在增加这两个头的设置：
+
+
+```bash
+# http://nginx.org/en/docs/http/websocket.html
+location /chat/ {
+    proxy_pass http://backend;
+    # 必须 http 1.1, http2 不支持websocket
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+}
+```
+
+然后重启`nginx`即可
+
+### 更加准确的头控制
+
+上面是无脑的将`Connection`头设置为`upgrade`，需要更加`sophisticated`的设置的话可以用 `map` 设定一个变量根据 `http_upgrade` 的值来确定是否需要 upgrade
+首先在`http`块里(`server`块的外面)加上
+
+```bash
+http{
+ # 创建一个`connection_upgrade`变量，依赖于`http_upgrade`
+ map $http_upgrade $connection_upgrade {
+        # http_upgrade 不为空时connection_upgrade为“upgrade”
+        default upgrade;
+        # http_upgrade 为空时connection_upgrade为“close”
+        ''      close;
+    }
+}
+```
+
+然后把 location 块中的代理设置改成：
+
+```bash
+location /chat/ {
+    proxy_pass http://backend;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    # 将无脑 upgrade 改成基于 http_upgrade 的变量
+    proxy_set_header Connection $connection_upgrade;
+}
+ 
+```
+
+然后重启`nginx`即可
+
