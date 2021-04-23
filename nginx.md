@@ -1,4 +1,34 @@
-# Nginx 
+# Nginx
+
+## 13: permission denied
+
+### SElinux 
+
+```
+getenforce
+setenforce 0
+```
+
+### 文件夹权限
+
+对于已有文件依旧报该错误的，考虑加权限
+
+将Nginx的用户加入所属路径的用户组
+
+```
+gpasswd -a nginx chenjr
+```
+然后讲所有的路径都加上组可读
+
+```
+chmod +x /home/
+chmod +x /home/username
+chmod +x /home/username/siteroot
+```
+
+如果还是无效考虑用root加权限
+
+
 
 ## 反向代理
 
