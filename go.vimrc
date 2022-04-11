@@ -189,3 +189,22 @@ call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
 "
 "
 let g:python3_host_prog='/home/chenjr/usr/bin/python3'
+
+" --- clang format ---
+let clang_format_dir='/home/chenjr/usr/clang-format'
+
+function ClangFormatFile()
+  let l:lines="all"
+  if has('python')
+      pyf /home/chenjr/usr/clang-format/clang-format.py
+  elseif has('python3')
+      py3f /home/chenjr/usr/clang-format/clang-format.py
+  endif
+
+endfunction
+
+command ClangFormat call ClangFormatFile()
+
+map <leader>f :ClangFormat<cr>
+imap <C-F> <c-o>:ClangFormat<cr>
+
