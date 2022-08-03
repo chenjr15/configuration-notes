@@ -2,11 +2,22 @@
 
 ## 编译安装python3.7.4 on debian
 
-从华为镜像站下载源码
+设置环境变量
 ```bash
-wget https://mirrors.huaweicloud.com/python/3.7.4/Python-3.7.4.tgz
-tar xvf Python-3.7.4.tgz
-cd Python-3.7.4
+# 镜像站
+MIRROR=https://mirrors.huaweicloud.com/python
+# Python 版本
+PY_VERSION=3.8.13
+
+# 安装路径
+PY_PATH=/data/opt/python$PY_VERSION
+```
+
+从镜像站下载源码
+```bash
+wget ${MIRROR}/${PY_VERSION}/Python-${PY_VERSION}.tgz
+tar xvf Python-${PY_VERSION}.tgz
+cd Python-${PY_VERSION}
 ```
 安装依赖
 
@@ -39,23 +50,23 @@ apt install \
 ```
 
 for centos 7
-```bash
-yum install -y \
-      # for _ctypes
-      libffi-devel\
-      # for lzma
-      xz-devel\
-      sqlite-devel\
-      # for _bz2\
-      bzip2-devel\
-      libuuid-devel\
-      readline-devel\
+```bash 
+sudo yum install -y  libffi-devel xz-devel sqlite-devel bzip2-devel  libuuid-devel readline-devel
 ```
+|模块|依赖|
+|---|---|
+|_ctypes|libffi-devel|
+|lzma|xz-devel|
+|sqlite|sqlite-devel|
+|_bz2|bzip2-devel|
+|uuid|libuuid-devel|
+|readline|readline-devel|
+
 
 三步走
 
 ```bash
-./configure --prefix=$HOME/usr/python3.7
+./configure --prefix=$PY_PATH
 make -j 
 make -j install
 ```
@@ -64,7 +75,42 @@ make -j install
 
 ```bash
 # 设置path
-export PATH="$HOME/usr/python3.7/bin:$PATH"
-# 设置manpath, 这样就可以用man python3.7 查看帮助了
-export MANPATH="$HOME/usr/python3.7/share/man:$MANPATH"
+echo export PATH="${PY_PATH}/bin:\$PATH">>$HOME/.bashrc
+# 设置manpath, 这样就可以用man python3 查看帮助了
+echo export MANPATH="${PY_PATH}/share/man:\$MANPATH">>$HOME/.bashrc
 ```
+
+## 完整脚本
+
+```bash
+#!/usr/bin/bash
+
+# 设置环境变量
+# 镜像站
+MIRROR=https://mirrors.huaweicloud.com/python
+# Python 版本
+PY_VERSION=3.8.13
+
+# 安装路径
+PY_PATH=/data/opt/python$PY_VERSION
+
+
+# 从镜像站下载源码
+wget ${MIRROR}/${PY_VERSION}/Python-${PY_VERSION}.tgz
+tar xvf Python-${PY_VERSION}.tgz
+cd Python-${PY_VERSION}
+
+
+# 安装依赖
+sudo yum install -y  libffi-devel xz-devel sqlite-devel bzip2-devel  libuuid-devel readline-devel
+
+./configure --prefix=$PY_PATH
+time make -j 
+time make -j install
+
+# 设置path
+echo export PATH="${PY_PATH}/bin:\$PATH">>$HOME/.bashrc
+# 设置manpath, 这样就可以用man python3 查看帮助了
+echo export MANPATH="${PY_PATH}/share/man:\$MANPATH">>$HOME/.bashrc
+```
+
