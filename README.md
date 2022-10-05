@@ -1,2 +1,3 @@
-# configuration-notes
-multiple configuration file snippets
+# 一些常用的配置笔记
+
+
