@@ -39,4 +39,12 @@ git stash --staged
 
 ```
 
+## git 打包脚本
 
+```bash
+#!/usr/bin/bash 
+project=`basename $PWD`
+packageName=${project}_`git describe --tags --long`
+echo $packageName
+git archive HEAD --prefix=$packageName/  |gzip >"../$packageName".tar.gz
+```
