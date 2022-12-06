@@ -1,0 +1,34 @@
+
+## 常用软件包安装
+
+```shell
+apt install fish htop vim git tree
+```
+
+## 禁止apt 自动更新
+
+将以下内容写入`/etc/apt/apt.conf.d/20auto-upgrades`
+
+```conf
+APT::Periodic::Download-Upgradeable-Packages "0";
+APT::Periodic::Unattended-Upgrade "0";
+```
+
+一行命令
+```
+echo -e '# 禁止apt 自动更新\nAPT::Periodic::Download-Upgradeable-Packages "0";\nAPT::Periodic::Unattended-Upgrade "0";' >/etc/apt/apt.conf.d/20auto-upgrades
+```
+
+## ssh 配置
+
+```ssh_config
+PermitRootLogin no
+PermitEmptyPasswords no
+PasswordAuthentication no
+
+# 允许本地子网用密码登录
+Match Address 192.168.0.0/16
+        PermitRootLogin yes
+        PasswordAuthentication yes
+
+```
