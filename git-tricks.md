@@ -48,3 +48,9 @@ packageName=${project}_`git describe --tags --long`
 echo $packageName
 git archive HEAD --prefix=$packageName/  |gzip >"../$packageName".tar.gz
 ```
+
+## 拉取pr
+拉取pull request 15 并创建分支test
+```bash
+git fetch origin pull/15/head:test
+```
