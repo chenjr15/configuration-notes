@@ -20,6 +20,14 @@ GRANT USAGE ON database.table TO 'user_name'@'hostname';
 | ALTER | ALTER TABLE权限（需要CREATE和INSERT权限）。重命名表需要DROP权限|
 |CREATE| CREATE TABLE 创建索引需要INDEX权限|
 
+## 查看某个账户的权限
+
+查看`username`在任意主机`%`的权限
+```mysql
+SHOW GRANTS FOR  'user_name'@'%';
+```
+或者
+
 ## 修改密码
 
 ```mysql
