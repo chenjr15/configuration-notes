@@ -59,3 +59,31 @@ Mysql 在`Unix/Linux `上表名默认是*区分*大小写的，而`Windows/Mac O
 
 
 [完整文档：Server System Variables](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_lower_case_table_names)
+
+## 修改连接数
+
+### 查看当前连接数:
+
+```sql
+show variables like '%max_connections%';
+```
+
+### 配置文件修改, 重启生效
+```
+# my.cnf
+max_connections = 2000
+```
+### 临时修改，立即生效，重启后会恢复
+
+```sql
+# 设置最大连接数
+set global max_connections = 2000;
+```
+### 建议
+
+先修改配置文件，如果可以重启就直接重启，若暂不可重启，就再临时设置连接数变量
+
+
+
+
+
