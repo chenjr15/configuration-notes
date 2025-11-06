@@ -54,3 +54,66 @@ git archive HEAD --prefix=$packageName/  |gzip >"../$packageName".tar.gz
 ```bash
 git fetch origin pull/15/head:test
 ```
+
+
+## 拉取Github PR
+
+github的pr是放在远程的`refs/pull/$PR/head`下的。
+
+保存为git-pickpr.sh 放在PATH目录下，可以通过`git-pickpr.sh`或者 `git pickpr`使用
+
+```sh
+#!/bin/bash
+set -e
+#set -x
+
+SQUASH=0
+SKIP_CONFIRM=0
+
+help(){
+  echo "usage: $0 [-s|--squash] <repo> <pr>"
+  echo "e.g. use squash merge to get origin repo's pull request #123: $0 -s origin 123 "
+  echo "e.g. 使用squash merge方式获取origin远程的#123拉取请求: $0 -s origin 123 "
+}
+
+while getopts 'shc' flag; do
+    case $flag in
+    s) SQUASH=1 ;shift ;;
+    h) help;exit 0;;
+    c) SKIP_CONFIRM=1;;
+    ?) echo unknown "$OPTARG" "$OPTVALUE"; help; exit 1;;
+    *) help;exit 1;;
+    esac
+done
+if [ "$#" -lt 2 ]; then
+  help
+  exit 1
+fi
+REPO=$1
+PR=$2
+echo -n searching repo="$REPO" pr="$PR" " "
+if [ "$SQUASH" -eq 1 ] ; then
+  echo using squash merge\(merge without commit\): \`git merge --squash\` instead of git rebase
+else
+  echo 
+fi
+REPO_URL=$(git remote  get-url $REPO )
+
+
+# ls-remote 查找对应分支
+last_commit=$(git ls-remote --refs "$REPO" refs/pull/$PR/head |cut -f 1 )
+git fetch "$REPO" "$last_commit"
+git log HEAD.."$last_commit"
+
+if [ "$SKIP_CONFIRM" -ne 1 ]; then
+        read -p "Press Enter to continue, Ctrl-C to exit."
+fi
+
+set -x
+if [ "$SQUASH" -eq 1 ] ; then
+  git merge --squash "$last_commit"
+else
+  git rebase "$last_commit"
+fi
+set +x
+```
